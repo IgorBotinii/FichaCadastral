@@ -12,13 +12,13 @@
         <form>
             <div class="field">
                 <label for="cnpj">1. Anexe o Cartão CNPJ e/ou Sintegra da empresa:</label>
-                <input type="file" id="cnpj" name="cnpj" multiple>
+                <input type="file" id="cnpj" name="cnpj" multiple required>
                 <small>Limite: 2 arquivos, 10MB cada. Tipos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio.</small>
             </div>
 
             <div class="field">
-                <label for="enquadramentoFiscal">2. O tipo de Enquadramento Fiscal:</label>
-                <select id="enquadramentoFiscal" name="enquadramentoFiscal">
+                <label>2. O tipo de Enquadramento Fiscal:</label>
+                <select name="enquadramento_fiscal" required>
                     <option value="">Selecione</option>
                     <option value="simples">Simples Nacional</option>
                     <option value="lucro_presumido">Lucro Presumido</option>
@@ -27,8 +27,8 @@
             </div>
 
             <div class="field">
-                <label for="tipoContribuinte">3. Informe o Tipo de Contribuinte da sua Empresa:</label>
-                <select id="tipoContribuinte" name="tipoContribuinte">
+                <label>3. Informe o Tipo de Contribuinte da sua Empresa:</label>
+                <select name="tipo_contribuinte" required>
                     <option value="">Selecione</option>
                     <option value="contribuinte">Contribuinte ICMS</option>
                     <option value="nao_contribuinte">Não Contribuinte ICMS</option>
@@ -36,8 +36,8 @@
             </div>
 
             <div class="field">
-                <label for="beneficioFiscal">4. Possui algum Benefício Fiscal:</label>
-                <select id="beneficioFiscal" name="beneficioFiscal">
+                <label>4. Possui algum Benefício Fiscal:</label>
+                <select name="beneficio_fiscal" required>
                     <option value="">Selecione</option>
                     <option value="nao">Não</option>
                     <option value="sim">Sim</option>
@@ -45,14 +45,14 @@
             </div>
 
             <div class="field">
-                <label for="beneficio">5. Anexe o documento referente ao benefício fiscal:</label>
-                <input type="file" id="beneficio" name="beneficio" multiple>
+                <label>5. Anexe o documento referente ao benefício fiscal:</label>
+                <input type="file" id="beneficio" name="beneficio" multiple required>
                 <small>Limite: 2 arquivos, 10MB cada. Tipos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio.</small>
             </div>
 
             <div class="field">
-                <label for="formaPagamento">6. Forma de Pagamento:</label>
-                <select id="formaPagamento" name="formaPagamento">
+                <label>6. Forma de Pagamento:</label>
+                <select name="forma_pagamento" required>
                     <option value="">Selecione</option>
                     <option value="boleto">Boleto</option>
                     <option value="deposito">Depósito</option>
@@ -61,14 +61,14 @@
             </div>
 
             <div class="field">
-                <label for="comprovante">7. Anexe um Comprovante de Dados Bancários da Empresa:</label>
-                <input type="file" id="comprovante" name="comprovante">
+                <label>7. Anexe um Comprovante de Dados Bancários da Empresa:</label>
+                <input type="file" id="comprovante" name="comprovante" required>
                 <small>Limite: 1 arquivo, 10MB. Tipos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio.</small>
             </div>
 
             <div class="field">
-                <label for="finalidade">8. Informe a Finalidade das Compras:</label>
-                <select id="finalidade" name="finalidade">
+                <label>8. Informe a Finalidade das Compras:</label>
+                <select name="finalidade_compras" required>
                     <option value="">Selecione</option>
                     <option value="industrializacao">Compra para Industrialização</option>
                     <option value="revenda">Compra para Revenda</option>
@@ -79,13 +79,13 @@
             </div>
 
             <div class="field">
-                <label for="contatoComercial">9. Informe um telefone e um e-mail comercial válido e o nome do responsável para consulta:</label>
-                <input type="text" id="contatoComercial" name="contatoComercial" placeholder="Insira sua resposta">
+                <label>9. Informe um telefone e um e-mail comercial válido e o nome do responsável:</label>
+                <input type="text" placeholder="Insira sua resposta" required>
             </div>
 
             <div class="field">
-                <label for="contatoAdministrativo">10. Informe um telefone e um e-mail administrativo (fiscal/financeiro) válido e o nome do responsável para consulta:</label>
-                <input type="text" id="contatoAdministrativo" name="contatoAdministrativo" placeholder="Insira sua resposta">
+                <label>10. Informe um telefone e um e-mail administrativo (fiscal/financeiro) válido e o nome do responsável:</label>
+                <input type="text" placeholder="Insira sua resposta" required>
             </div>
 
             <button type="submit">Enviar</button>
@@ -93,25 +93,15 @@
     </div>
     <script>
         const form = document.querySelector('form');
-
+    
         form.addEventListener('submit', async (event) => {
             event.preventDefault(); // Impede o envio padrão do formulário
-
+    
             const formData = new FormData(form);
-            const data = {
-                cnpj: formData.get('cnpj'),
-                enquadramento_fiscal: formData.get('enquadramentoFiscal'),
-                tipo_contribuinte: formData.get('tipoContribuinte'),
-                beneficio_fiscal: formData.get('beneficioFiscal'),
-                forma_pagamento: formData.get('formaPagamento'),
-                comprovante: formData.get('comprovante'),
-                finalidade: formData.get('finalidade'),
-                contato_comercial: formData.get('contatoComercial'),
-                contato_administrativo: formData.get('contatoAdministrativo'),
-            };
-
+            const data = Object.fromEntries(formData.entries());
+    
             try {
-                const response = await fetch('http://localhost:3000/api/submit', { // Atualizado para o servidor local
+                const response = await fetch('http://localhost:3000/api/submit', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
