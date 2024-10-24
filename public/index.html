@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Ficha Cadastral - Clientes</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Ficha Cadastral - Clientes</h1>
+        <form>
+            <div class="field">
+                <label for="cnpj">1. Anexe o Cartão CNPJ e/ou Sintegra da empresa:</label>
+                <input type="file" id="cnpj" name="cnpj" multiple>
+                <small>Limite: 2 arquivos, 10MB cada. Tipos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio.</small>
+            </div>
+
+            <div class="field">
+                <label for="enquadramentoFiscal">2. O tipo de Enquadramento Fiscal:</label>
+                <select id="enquadramentoFiscal" name="enquadramentoFiscal">
+                    <option value="">Selecione</option>
+                    <option value="simples">Simples Nacional</option>
+                    <option value="lucro_presumido">Lucro Presumido</option>
+                    <option value="lucro_real">Lucro Real</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="tipoContribuinte">3. Informe o Tipo de Contribuinte da sua Empresa:</label>
+                <select id="tipoContribuinte" name="tipoContribuinte">
+                    <option value="">Selecione</option>
+                    <option value="contribuinte">Contribuinte ICMS</option>
+                    <option value="nao_contribuinte">Não Contribuinte ICMS</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="beneficioFiscal">4. Possui algum Benefício Fiscal:</label>
+                <select id="beneficioFiscal" name="beneficioFiscal">
+                    <option value="">Selecione</option>
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="beneficio">5. Anexe o documento referente ao benefício fiscal:</label>
+                <input type="file" id="beneficio" name="beneficio" multiple>
+                <small>Limite: 2 arquivos, 10MB cada. Tipos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio.</small>
+            </div>
+
+            <div class="field">
+                <label for="formaPagamento">6. Forma de Pagamento:</label>
+                <select id="formaPagamento" name="formaPagamento">
+                    <option value="">Selecione</option>
+                    <option value="boleto">Boleto</option>
+                    <option value="deposito">Depósito</option>
+                    <option value="pix">Pix</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="comprovante">7. Anexe um Comprovante de Dados Bancários da Empresa:</label>
+                <input type="file" id="comprovante" name="comprovante">
+                <small>Limite: 1 arquivo, 10MB. Tipos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio.</small>
+            </div>
+
+            <div class="field">
+                <label for="finalidade">8. Informe a Finalidade das Compras:</label>
+                <select id="finalidade" name="finalidade">
+                    <option value="">Selecione</option>
+                    <option value="industrializacao">Compra para Industrialização</option>
+                    <option value="revenda">Compra para Revenda</option>
+                    <option value="uso_consumo">Compras para Uso e Consumo</option>
+                    <option value="ativo_imobilizado">Compra de Ativo Imobilizado</option>
+                    <option value="de_acordo">De acordo com o pedido</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="contatoComercial">9. Informe um telefone e um e-mail comercial válido e o nome do responsável para consulta:</label>
+                <input type="text" id="contatoComercial" name="contatoComercial" placeholder="Insira sua resposta">
+            </div>
+
+            <div class="field">
+                <label for="contatoAdministrativo">10. Informe um telefone e um e-mail administrativo (fiscal/financeiro) válido e o nome do responsável para consulta:</label>
+                <input type="text" id="contatoAdministrativo" name="contatoAdministrativo" placeholder="Insira sua resposta">
+            </div>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <script>
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const formData = new FormData(form);
+            const data = {
+                cnpj: formData.get('cnpj'),
+                enquadramento_fiscal: formData.get('enquadramentoFiscal'),
+                tipo_contribuinte: formData.get('tipoContribuinte'),
+                beneficio_fiscal: formData.get('beneficioFiscal'),
+                forma_pagamento: formData.get('formaPagamento'),
+                comprovante: formData.get('comprovante'),
+                finalidade: formData.get('finalidade'),
+                contato_comercial: formData.get('contatoComercial'),
+                contato_administrativo: formData.get('contatoAdministrativo'),
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/submit', { // Atualizado para o servidor local
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.text();
+                alert(result);
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar o formulário.');
+            }
+        });
+    </script>
+</body>
+</html>
